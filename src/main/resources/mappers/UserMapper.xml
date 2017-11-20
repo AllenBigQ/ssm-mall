@@ -195,9 +195,9 @@
   <select id="checkPassword" resultType="int" parameterType="map">
     SELECT
     count(1)
-    FROM mmall_user
-    WHERE id=#{password}
-    and id=#{userId}
+    from mmall_user
+    where password = #{password}
+    and id = #{userId}
   </select>
   
   <select id="checkEmailByUserId" resultType="int" parameterType="map">
