@@ -11,6 +11,8 @@ public class FileServiceImpl implements IFileService {
         String filenName = file.getOriginalFilename();
         //扩展名
         //abc.jpg
+        String fileExtendsionName = filenName.substring(filenName.lastIndexOf(".")+1);
+        String uploadFileName="";
         
     }
 }
