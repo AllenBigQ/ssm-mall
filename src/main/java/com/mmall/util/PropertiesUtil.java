@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.Properties;
 
 /**
- * Created by geely
+ * Created by allen
  */
 public class PropertiesUtil {
 
@@ -26,7 +26,7 @@ public class PropertiesUtil {
             logger.error("配置文件读取异常",e);
         }
     }
-
+    //通过key获取文件里的value（避免两边的空格）
     public static String getProperty(String key){
         String value = props.getProperty(key.trim());
         if(StringUtils.isBlank(value)){
@@ -34,6 +34,7 @@ public class PropertiesUtil {
         }
         return value.trim();
     }
+
 
     public static String getProperty(String key,String defaultValue){
 
