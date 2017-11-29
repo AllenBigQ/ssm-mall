@@ -187,14 +187,14 @@
 
   <select id="selectByNameAndProductId" resultMap="BaseResultMap" parameterType="map">
     SELECT
-    <include refid="com.mmall.dao.CartMapper.Base_Column_List"></include>
-    FROM mmall_product
+    <include refid="Base_Column_List"/>
+    from mmall_product
     <where>
-      <if test="productName!=null">
-        AND NAME LIKE #{productName}
+      <if test="productName != null">
+        and name like #{productName}
       </if>
-      <if>
-        and id=#{productId}
+      <if test="productId != null">
+        and id = #{productId}
       </if>
     </where>
   </select>
