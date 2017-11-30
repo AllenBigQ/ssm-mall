@@ -189,7 +189,7 @@ public class ProductServiceImpl implements IProductService {
                 PageInfo pageInfo = new PageInfo(productListVoList);
                 return ServerResponse.createBySuccess(pageInfo);
             }
-            categoryIdList=iCategoryService.selectCategoryAndChildrenById(category).getData();
+            categoryIdList=iCategoryService.selectCategoryAndChildrenById(category.getId()).getData();
         }
         if (StringUtils.isNotBlank(keyword)){
             keyword = new StringBuilder().append("%").append(keyword).append("%").toString();
@@ -202,6 +202,14 @@ public class ProductServiceImpl implements IProductService {
                 PageHelper.orderBy(orderByArray[0]+" "+orderByArray[1]);
             }
         }
-        List<Product> productList =
+        List<Product> productList =productMapper.selectByNameAndCategoryIds(StringUtils.isBlank(keyword)?null:keyword,categoryIdList.size()==0?null:categoryIdList);
+        List<ProductListVo>productListVoList = Lists.newArrayList();
+        for (Product product:productList) {
+            ProductListVo productListVo = assembleProductListVo(product);
+            productListVoList.add(productListVo);
+        }
+        PageInfo pageInfo = new PageInfo(productList);
+        pageInfo.setList(productListVoList);
+        return ServerResponse.createBySuccess(pageInfo);
     }
 }
