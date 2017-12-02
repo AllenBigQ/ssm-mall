@@ -109,7 +109,6 @@ public class CartController {
         if (user==null){
             return ServerResponse.createBySuccess(0);
         }
-        return  iCartService.selectOrUnselect(user.getId(),null,Const.Cart.CHECKED);
+        return  iCartService.getCartProductCount(user.getId());
     }
-
 }

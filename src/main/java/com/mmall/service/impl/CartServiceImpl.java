@@ -92,7 +92,7 @@ public class CartServiceImpl implements ICartService {
         if (userId==null){
             return ServerResponse.createBySuccess(0);
         }
-
+        return ServerResponse.createBySuccess(cartMapper.selectCartProductCount(userId));
     }
 
     //
