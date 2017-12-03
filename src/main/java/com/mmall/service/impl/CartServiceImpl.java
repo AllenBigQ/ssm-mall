@@ -33,24 +33,25 @@ public class CartServiceImpl implements ICartService {
     private ProductMapper productMapper;
 
 
-    public ServerResponse<CartVo> add (Integer userId,Integer productId,Integer count){
-        if (productId==null||count==null){
+    public ServerResponse<CartVo> add(Integer userId,Integer productId,Integer count){
+        if(productId == null || count == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
 
+
         Cart cart = cartMapper.selectCartByUserIdProductId(userId,productId);
-        if (cart==null){
-            //这个产品不在这个购物车里，需要新增一个这个产品的记录
+        if(cart == null){
+            //这个产品不在这个购物车里,需要新增一个这个产品的记录
             Cart cartItem = new Cart();
             cartItem.setQuantity(count);
             cartItem.setChecked(Const.Cart.CHECKED);
             cartItem.setProductId(productId);
             cartItem.setUserId(userId);
             cartMapper.insert(cartItem);
-        }else {
-            //这个产品已经在购物车里了
-            //如果产品已经存在，数量相加
-            count = cart.getQuantity()+count;
+        }else{
+            //这个产品已经在购物车里了.
+            //如果产品已存在,数量相加
+            count = cart.getQuantity() + count;
             cart.setQuantity(count);
             cartMapper.updateByPrimaryKeySelective(cart);
         }
@@ -79,7 +80,7 @@ public class CartServiceImpl implements ICartService {
         return this.list(userId);
     }
 
-    public ServerResponse<CartVo>list(Integer userId){
+    public ServerResponse<CartVo> list (Integer userId){
         CartVo cartVo = this.getCartVoLimit(userId);
         return ServerResponse.createBySuccess(cartVo);
     }
@@ -102,15 +103,16 @@ public class CartServiceImpl implements ICartService {
         List<CartProductVo> cartProductVoList = Lists.newArrayList();
 
         BigDecimal cartTotalPrice = new BigDecimal("0");
-        if (CollectionUtils.isNotEmpty(cartList)){
-            for (Cart cartItem:cartList) {
-                CartProductVo cartProductVo= new CartProductVo();
+
+        if(CollectionUtils.isNotEmpty(cartList)){
+            for(Cart cartItem : cartList){
+                CartProductVo cartProductVo = new CartProductVo();
                 cartProductVo.setId(cartItem.getId());
                 cartProductVo.setUserId(userId);
                 cartProductVo.setProductId(cartItem.getProductId());
 
-                Product product = productMapper.selectByPrimaryKey(cartItem.getId());
-                if (product!=null){
+                Product product = productMapper.selectByPrimaryKey(cartItem.getProductId());
+                if(product != null){
                     cartProductVo.setProductMainImage(product.getMainImage());
                     cartProductVo.setProductName(product.getName());
                     cartProductVo.setProductSubtitle(product.getSubtitle());
@@ -119,11 +121,11 @@ public class CartServiceImpl implements ICartService {
                     cartProductVo.setProductStock(product.getStock());
                     //判断库存
                     int buyLimitCount = 0;
-                    if (product.getStock()>=cartItem.getQuantity()){
+                    if(product.getStock() >= cartItem.getQuantity()){
                         //库存充足的时候
                         buyLimitCount = cartItem.getQuantity();
                         cartProductVo.setLimitQuantity(Const.Cart.LIMIT_NUM_SUCCESS);
-                    }else {
+                    }else{
                         buyLimitCount = product.getStock();
                         cartProductVo.setLimitQuantity(Const.Cart.LIMIT_NUM_FAIL);
                         //购物车中更新有效库存
@@ -138,9 +140,9 @@ public class CartServiceImpl implements ICartService {
                     cartProductVo.setProductChecked(cartItem.getChecked());
                 }
 
-                if (cartItem.getChecked()==Const.Cart.CHECKED){
-                    //如果已经勾选，增加到整个的购物车总价中
-                    cartTotalPrice=BigDecimalUtil.add(cartTotalPrice.doubleValue(),cartProductVo.getProductTotalPrice().doubleValue());
+                if(cartItem.getChecked() == Const.Cart.CHECKED){
+                    //如果已经勾选,增加到整个的购物车总价中
+                    cartTotalPrice = BigDecimalUtil.add(cartTotalPrice.doubleValue(),cartProductVo.getProductTotalPrice().doubleValue());
                 }
                 cartProductVoList.add(cartProductVo);
             }
@@ -149,6 +151,7 @@ public class CartServiceImpl implements ICartService {
         cartVo.setCartProductVoList(cartProductVoList);
         cartVo.setAllChecked(this.getAllCheckedStatus(userId));
         cartVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix"));
+
         return cartVo;
     }
 

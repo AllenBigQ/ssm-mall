@@ -119,10 +119,10 @@
 
   <select id="selectCartByUserIdProductId" resultMap="BaseResultMap" parameterType="map">
     SELECT
-    <include refid="Base_Column_List"></include>
-    FROM mmall_cart
-    WHERE user_id = #{userId}
-    and product_id=#{productId}
+    <include refid="Base_Column_List"/>
+    from mmall_cart
+    where user_id = #{userId}
+    and product_id = #{productId}
   </select>
 
   <select id="selectCartByUserId" resultMap="BaseResultMap" parameterType="int" >
@@ -139,9 +139,9 @@
   </select>
 
   <delete id="deleteByUserIdProductIds" parameterType="map">
-    DELETE FROM mmall_cart
-    WHERE user_id = #{userId}}
-    <if test="productIdList!=null">
+    delete from mmall_cart
+    where user_id = #{userId}
+    <if test="productIdList != null">
       and product_id in
       <foreach collection="productIdList" item="item" index="index" open="(" separator="," close=")">
         #{item}
@@ -150,11 +150,11 @@
   </delete>
 
   <update id="checkedOrUncheckedProduct" parameterType="map">
-    UPDATE mmall_cart
-    SET checked = #{checked}
+    UPDATE  mmall_cart
+    set checked = #{checked},
     update_time = now()
     where user_id = #{userId}
-    <if test="productId!=null">
+    <if test="productId != null">
       and product_id = #{productId}
     </if>
   </update>
