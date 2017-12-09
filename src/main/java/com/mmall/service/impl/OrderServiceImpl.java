@@ -152,23 +152,19 @@ public class OrderServiceImpl implements IOrderService {
                     logger.error("上传二维码异常",e);
                 }
                 logger.info("filePath:" + qrPath);
-
-
-
-                //                ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
-                break;
-
+                String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFile.getName();
+                resultMap.put("qrUrl",qrUrl);
+                return ServerResponse.createBySuccess(resultMap);
             case FAILED:
                 logger.error("支付宝预下单失败!!!");
-                break;
-
+                return ServerResponse.createByErrorMessage("支付宝预下单失败!!!");
             case UNKNOWN:
                 logger.error("系统异常，预下单状态未知!!!");
-                break;
-
+                return ServerResponse.createByErrorMessage("系统异常，预下单状态未知!!!");
             default:
                 logger.error("不支持的交易状态，交易返回异常!!!");
-                break;
+                return ServerResponse.createByErrorMessage("不支持的交易状态，交易返回异常!!!");
+
         }
 
 
