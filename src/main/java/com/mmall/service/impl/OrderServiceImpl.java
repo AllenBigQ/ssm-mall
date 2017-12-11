@@ -35,6 +35,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Allen
@@ -69,9 +70,27 @@ public class OrderServiceImpl implements IOrderService {
         List<OrderItem> orderItemList = (List<OrderItem>) serverResponse.getData();
         BigDecimal payment= this.getOrderTotalPrice(orderItemList);
         //生成订单
-        Order order =
+        Order order = this.assembalOrder(userId,shippingId,payment);
+        if (order==null){
+            return ServerResponse.createByErrorMessage("生成订单错误");
+        }
+        if (CollectionUtils.isEmpty(orderItemList)){
+            return ServerResponse.createByErrorMessage("购物车为空");
+        }
+        for (OrderItem orderItem:orderItemList){
+            orderItem.setOrderNo(order.getOrderNo());
+        }
+        //mybatis 批量插入
 
     }
+
+    private void resuceProductStock(List<OrderItem> orderItemList){
+        for (OrderItem orderItem:orderItemList){
+            Product product = productMapper.selectByPrimaryKey(orderItem.getProductId());
+            
+        }
+    }
+
 
     private Order assembalOrder(Integer userId,Integer shippingId,BigDecimal payment){
         Order order = new Order();
@@ -96,13 +115,14 @@ public class OrderServiceImpl implements IOrderService {
 
     private long generateOrderNo(){
         long currentTime =System.currentTimeMillis();
-        return currentTime+currentTime%10;//0-9 10个数字
+        return currentTime+new Random().nextInt(100);
     }
 
+    //生成订单总金额
     private BigDecimal getOrderTotalPrice( List<OrderItem> orderItemList ){
         BigDecimal payment = new BigDecimal("0");
         for (OrderItem orderItem:orderItemList){
-            BigDecimalUtil.add(payment.doubleValue(),orderItem.getTotalPrice().doubleValue());
+            payment=BigDecimalUtil.add(payment.doubleValue(),orderItem.getTotalPrice().doubleValue());
         }
         return payment;
     }
