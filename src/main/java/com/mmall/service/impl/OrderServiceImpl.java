@@ -84,10 +84,14 @@ public class OrderServiceImpl implements IOrderService {
 
         order.setUserId(userId);
         order.setShippingId(shippingId);
-
         //发货时间
-
         //付款时间
+
+        int rowCount = orderMapper.insert(order);
+        if (rowCount>0){
+            return order;
+        }
+        return null;
     }
 
     private long generateOrderNo(){
