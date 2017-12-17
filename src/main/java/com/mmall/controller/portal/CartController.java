@@ -32,6 +32,13 @@ public class CartController {
         return iCartService.add(user.getId(),productId,count);
     }
 
+    /**
+     *
+     * @param session
+     * @param count
+     * @param productId
+     * @return 更新购物车某个产品数量
+     */
     @RequestMapping("update.do")
     @ResponseBody
     public ServerResponse<CartVo> update(HttpSession session, Integer count, Integer productId){
@@ -42,6 +49,12 @@ public class CartController {
         return  iCartService.update(user.getId(),productId,count);
     }
 
+    /**
+     *移除购物车某个产品
+     * @param session
+     * @param productIds
+     * @return
+     */
     @RequestMapping("delete_product.do")
     @ResponseBody
     //productIds是与前端约定用逗号分隔，多个产品
@@ -102,6 +115,11 @@ public class CartController {
         return  iCartService.selectOrUnselect(user.getId(),productId,Const.Cart.UN_CHECKED);
     }
 
+    /**
+     * 查询购物车产品数量
+     * @param session
+     * @return
+     */
     @RequestMapping("get_cart_product_count.do")
     @ResponseBody
     public ServerResponse<Integer> getCartProductCount(HttpSession session){
