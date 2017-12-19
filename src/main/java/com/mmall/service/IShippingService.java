@@ -8,6 +8,7 @@ import com.mmall.pojo.Shipping;
  * Created by Allen
  */
 public  interface  IShippingService {
+    //添加地址
     ServerResponse add(Integer userId, Shipping shipping);
     ServerResponse<String >del(Integer userId,Integer shippingId);
     ServerResponse update(Integer userId, Shipping shipping);
