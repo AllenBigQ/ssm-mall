@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * Created by Allen
+ * 高服用服务响应对象的设计
  */
 //通用的响应对象，跟接口一致
 @JsonSerialize(include =  JsonSerialize.Inclusion.NON_NULL)

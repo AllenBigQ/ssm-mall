@@ -25,19 +25,19 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ServerResponse<User> login(String username, String password) {
-        int resultCount=userMapper.checkUsername(username);
-        if (resultCount==0){
+        int resultCount = userMapper.checkUsername(username);
+        if(resultCount == 0 ){
             return ServerResponse.createByErrorMessage("用户名不存在");
         }
-        //todo 密码登陆MD5加密
-        String md5password = MD5Util.MD5EncodeUtf8(password);
-        User user = userMapper.selectLogin(username,md5password);
-        if (user==null){
+
+        String md5Password = MD5Util.MD5EncodeUtf8(password);
+        User user  = userMapper.selectLogin(username,md5Password);
+        if(user == null){
             return ServerResponse.createByErrorMessage("密码错误");
         }
-        user.setPassword(StringUtils.EMPTY);
-        return ServerResponse.createBySuccess("登陆成功",user);
 
+        user.setPassword(org.apache.commons.lang3.StringUtils.EMPTY);
+        return ServerResponse.createBySuccess("登录成功",user);
     }
 
     public ServerResponse<String> register(User user){
@@ -58,8 +58,9 @@ public class UserServiceImpl implements IUserService {
         }
         return ServerResponse.createBySuccessMessage("注册成功");
     }
-
+    //str可以是用户名或邮箱，type可以是username或email
     public ServerResponse<String> checkValid(String str,String type){
+        //isNotBlank和isNotEmpty的区别是，isNotBlank中 字符串"  "=false。
         if (StringUtils.isNotBlank(type)){
             //开始校验
             if(Const.USERNAME.equals(type)){
@@ -132,7 +133,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     public ServerResponse<String> resetPassword(String passwordOld,String passwordNew,User user){
-        //防止横向越权，要校验一下这个用户的旧密码，一定要指定是这个用户，因为我们会查询count(1)，如果不指定id，那么结果就是true,count>0；
+        //防止横向越权，要校验一下这个用户的旧密码，一定要指定是这个用户，
+        // 因为我们会查询count(1)，如果不指定id，那么结果就是true,count>0；
         int resultCount = userMapper.checkPassword(MD5Util.MD5EncodeUtf8(passwordOld),user.getId());
         if(resultCount == 0){
             return ServerResponse.createByErrorMessage("旧密码错误");

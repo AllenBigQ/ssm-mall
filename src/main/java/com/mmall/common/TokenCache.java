@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by geely
+ * Created by allen
+ * Token的本地缓存
  */
 public class TokenCache {
 

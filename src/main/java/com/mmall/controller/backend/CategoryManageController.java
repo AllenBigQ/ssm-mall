@@ -59,6 +59,12 @@ public class CategoryManageController {
         }
     }
 
+    /**
+     * 得到孩子节点的平级目录
+     * @param session
+     * @param categoryId
+     * @return
+     */
     @RequestMapping("get_category.do")
     @ResponseBody
     public ServerResponse getChildrenParallelCategory(HttpSession session,@RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
@@ -74,6 +80,13 @@ public class CategoryManageController {
         }
     }
 
+    /**
+     *
+     * @param session
+     * @param categoryId
+     * @return
+     * 查询目录和子节点的目录
+     * */
     @RequestMapping("get_deep_category.do")
     @ResponseBody
     public ServerResponse getCategoryAndDeepChildrenCategory(HttpSession session,@RequestParam(value = "categoryId",defaultValue = "0") Integer categoryId){
@@ -83,6 +96,7 @@ public class CategoryManageController {
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
             //查询当前节点的id和递归子节点的id
+            //0-->100>1000 如果传过来0要返回0 100 1000，如果传100 要返回100 1000
             return iCategoryService.selectCategoryAndChildrenById(categoryId);
         }else{
             return ServerResponse.createByErrorMessage("无权限操作，需要管理员权限");
