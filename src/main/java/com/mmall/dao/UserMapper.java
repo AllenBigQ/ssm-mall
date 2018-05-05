@@ -2,7 +2,6 @@ package com.mmall.dao;
 
 import com.mmall.pojo.User;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.javassist.compiler.ast.IntConst;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);

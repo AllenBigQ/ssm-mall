@@ -18,6 +18,16 @@ import java.util.UUID;
 /**
  * Created by Allen
  */
+/*
+* @Service注解
+* 首先，在applicationContext.xml文件中加一行：<context:component-scan base-package="com.xxx.xxx"/>
+* 加上这一行以后，将自动扫描路径下面的包，如果一个类带了@Service注解，将自动注册到Spring容器，
+* 不需要再在applicationContext.xml文件定义bean了，类似的还包括@Component、@Repository、@Controller
+* 相当于
+* <bean id="iUserService" class="com.mmall.service.impl.UserServiceImpl" >
+         ......
+   </bean>
+* */
 @Service("iUserService")
 public class UserServiceImpl implements IUserService {
     @Autowired
@@ -49,8 +59,10 @@ public class UserServiceImpl implements IUserService {
         if (!validResponse.isSuccess()){
             return validResponse;
         }
+        //设置角色-普通用户-0
         user.setRole(Const.Role.ROLE_CUSTOMER);
         //MD5加密
+        //将密码取出加密后再重新设置
         user.setPassword(MD5Util.MD5EncodeUtf8(user.getPassword()));
         int resultCount = userMapper.insert(user);
         if(resultCount == 0){

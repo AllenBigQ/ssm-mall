@@ -5,6 +5,7 @@ import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
+import com.mmall.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,6 @@ import javax.servlet.http.HttpSession;
 public class UserController {
     @Autowired
     private IUserService iUserService;
-
     /**
      * 用户登录功能
      *
@@ -67,6 +67,8 @@ public class UserController {
      */
     @RequestMapping(value = "register.do", method = RequestMethod.POST)
     @ResponseBody
+    /*访问/user/register.do 传入的是一个User对象，也可以是username,password……
+    * 这里涉及到SpringMvc的数据绑定问题 直接传入一个User对象就可以*/
     public ServerResponse<String> register(User user) {
 
         return iUserService.register(user);
